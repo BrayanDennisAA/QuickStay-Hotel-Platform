@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/QuickStay.Api/QuickStay.Api.csproj" />
+    <Project Path="src/QuickStay.Application/QuickStay.Application.csproj" />
+    <Project Path="src/QuickStay.Domain/QuickStay.Domain.csproj" />
+    <Project Path="src/QuickStay.Infrastructure/QuickStay.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/QuickStay.Api.Tests/QuickStay.Api.Tests.csproj" />
+    <Project Path="tests/QuickStay.Application.Tests/QuickStay.Application.Tests.csproj" />
+  </Folder>
+</Solution>
