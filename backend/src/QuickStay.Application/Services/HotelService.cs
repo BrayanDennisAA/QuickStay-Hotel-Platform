@@ -30,4 +30,16 @@ public class HotelService : IHotelService
         );
     }
 
+    public async Task<IEnumerable<HotelResponse>> SearchHotelsAsync(string? city)
+    {
+        var hotels = await _hotelRepository.SearchHotelsAsync(city);
+
+        return hotels.Select(hotel => new HotelResponse(
+            hotel.Id,
+            hotel.Name,
+            hotel.City,
+            hotel.Country
+        ));
+    }
+
 }

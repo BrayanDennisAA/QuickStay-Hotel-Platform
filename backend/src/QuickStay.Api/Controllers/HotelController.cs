@@ -21,5 +21,12 @@ namespace QuickStay.Api.Controllers
             var hotelResponse = await _hotelService.GetHotelByIdAsync(hotelId);
             return Ok(hotelResponse);
         }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchHotels([FromQuery] string? city)
+        {
+            var hotelsResponse = await _hotelService.SearchHotelsAsync(city);
+            return Ok(hotelsResponse);
+        }
     }
 }
