@@ -11,5 +11,17 @@ namespace QuickStay.Api.Modules.Availability.Domain.Entities
         public int ReservedRooms { get; private set; }
 
         public int AvailableRooms => TotalRooms - ReservedRooms;
+
+        private Inventory() { }
+
+        public Inventory(Guid guid, Guid hotelId, Guid roomTypeId, DateOnly date, int totalRooms, int reservedRooms)
+        {
+            Id = guid;
+            HotelId = hotelId;
+            RoomTypeId = roomTypeId;
+            Date = date;
+            TotalRooms = totalRooms;
+            ReservedRooms = reservedRooms;
+        }
     }
 }

@@ -10,4 +10,15 @@ public class RoomType: EntityBase<Guid>
     public decimal BasePrice { get; set; }
 
     public Hotel Hotel { get; set; } = default!;
+
+    private RoomType() { }
+
+    public RoomType(Guid guid, Guid hotelId, string name, int capacity, decimal basePrice)
+    {
+        Id = guid;
+        HotelId = hotelId;
+        Name = name;
+        Capacity = capacity;
+        BasePrice = basePrice;
+    }
 }

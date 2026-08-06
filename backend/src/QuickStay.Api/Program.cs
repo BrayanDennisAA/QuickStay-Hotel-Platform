@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using QuickStay.Api.Infrastructure.Persistence;
 using QuickStay.Api.Modules.Availability;
 using QuickStay.Api.Modules.Catalog;
 using QuickStay.Api.Modules.Search;
@@ -20,6 +22,13 @@ builder.Services
 
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<QuickStayDbContext>();
+    await dbContext.Database.MigrateAsync();
+}
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
