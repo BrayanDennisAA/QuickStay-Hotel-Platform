@@ -1,4 +1,6 @@
-using QuickStay.Application;
+using QuickStay.Api.Modules.Availability;
+using QuickStay.Api.Modules.Catalog;
+using QuickStay.Api.Modules.Search;
 using QuickStay.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,8 +11,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
+
+builder.Services
+    .AddCatalogModule()
+    .AddAvailabilityModule()
+    .AddSearchModule();
 
 
 var app = builder.Build();

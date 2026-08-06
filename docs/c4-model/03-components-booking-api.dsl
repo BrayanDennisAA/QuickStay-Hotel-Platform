@@ -11,37 +11,44 @@ workspace "QuickStay - C4 L3 Components (.NET Monolith API)" {
             webApp = container "Web App" "Customer and staff web UI." "Next.js"
 
             bookingApi = container "Booking API" "Single JSON/HTTP API backend." ".NET Web API" {
-                searchComponent = component "Search Component" "Search hotels/rooms by location, dates, price, amenities." "ASP.NET Core + Application Service"
-                availabilityComponent = component "Availability Component" "Calculates real-time availability and temporary holds." "ASP.NET Core + Domain Service"
-                reservationComponent = component "Reservation Component" "Create, read, cancel, and modify reservation (basic)." "ASP.NET Core + Application Service"
-                paymentComponent = component "Payment Component" "Online payment flow and pay-at-hotel registration." "ASP.NET Core + External Adapter"
-                notificationComponent = component "Notification Component" "Booking confirmation/reminder/change notifications." "Background/Service"
+                catalogModule = component "Catalog Module" "Hotels and room types management/read model." "ASP.NET Core Module"
+                searchModule = component "Search Module" "Search orchestration using catalog + availability." "ASP.NET Core Module"
+                availabilityModule = component "Availability Module" "Inventory by date and temporary hold checks." "ASP.NET Core Module"
+                reservationsModule = component "Reservations Module" "Create/modify/cancel reservations." "ASP.NET Core Module"
+                paymentsModule = component "Payments Module" "Payment processing and payment state." "ASP.NET Core Module"
+                notificationsModule = component "Notifications Module" "Booking notifications (confirmation/change/reminder)." "ASP.NET Core Module"
+                integrationsModule = component "Integrations Module" "OTA synchronization adapters/webhooks." "ASP.NET Core Module"
             }
 
             db = container "Database" "Transactional store." "PostgreSQL"{
                 tag "PostgreSQL"
             }
 
-            webApp -> bookingApi.searchComponent "Searches"
-            webApp -> bookingApi.availabilityComponent "Checks availability"
-            webApp -> bookingApi.reservationComponent "Creates/manages reservations"
-            webApp -> bookingApi.paymentComponent "Performs payment"
+            webApp -> bookingApi.searchModule "Searches hotels"
+            webApp -> bookingApi.availabilityModule "Checks availability"
+            webApp -> bookingApi.reservationsModule "Creates/manages reservations"
+            webApp -> bookingApi.paymentsModule "Executes payments"
 
-            bookingApi.searchComponent -> bookingApi.availabilityComponent "Queries availability"
-            bookingApi.reservationComponent -> bookingApi.availabilityComponent "Places/releases holds"
-            bookingApi.reservationComponent -> bookingApi.paymentComponent "Triggers payment when needed"
-            bookingApi.reservationComponent -> bookingApi.notificationComponent "Triggers notifications"
+            bookingApi.searchModule -> bookingApi.catalogModule "Reads hotels/room types"
+            bookingApi.searchModule -> bookingApi.availabilityModule "Checks availability"
 
-            bookingApi.searchComponent -> db "Reads hotels/rooms/rates"
-            bookingApi.availabilityComponent -> db "Reads/Writes inventory"
-            bookingApi.reservationComponent -> db "Reads/Writes reservations"
-            bookingApi.paymentComponent -> db "Reads/Writes payments"
-            bookingApi.notificationComponent -> db "Reads templates/logs"
+            bookingApi.reservationsModule -> bookingApi.availabilityModule "Places/releases holds"
+            bookingApi.reservationsModule -> bookingApi.paymentsModule "Triggers payment flow"
+            bookingApi.reservationsModule -> bookingApi.notificationsModule "Triggers notifications"
+            bookingApi.reservationsModule -> bookingApi.integrationsModule "Publishes reservation updates"
 
 
-            bookingApi.paymentComponent -> paymentProvider "Calls payment API" "HTTPS"
-            bookingApi.notificationComponent -> notificationProvider "Sends messages" "HTTPS"
-            bookingApi.reservationComponent -> otaPlatform "Syncs reservation updates" "HTTPS/Webhook"
+            bookingApi.catalogModule -> db "Reads/Writes catalog tables"
+            bookingApi.availabilityModule -> db "Reads/Writes inventory tables"
+            bookingApi.reservationsModule -> db "Reads/Writes reservation tables"
+            bookingApi.paymentsModule -> db "Reads/Writes payment tables"
+            bookingApi.notificationsModule -> db "Reads/Writes notification logs/templates"
+            bookingApi.integrationsModule -> db "Reads/Writes sync state tables"
+
+
+            bookingApi.paymentsModule -> paymentProvider "Calls payment API" "HTTPS"
+            bookingApi.notificationsModule -> notificationProvider "Sends messages" "HTTPS"
+            bookingApi.integrationsModule -> otaPlatform "Syncs OTA updates" "HTTPS/Webhook"
         }
     }
 
