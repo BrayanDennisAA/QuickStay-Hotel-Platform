@@ -1,7 +1,7 @@
 'use client';
 
 import { useActionState } from 'react';
-import { searchHotelsAction } from '../application/actions/searchActions';
+import { searchHotelsAction } from './actions/searchActions';
 import { SearchResults } from './SearchResults';
 import { initialSearchState } from '../types/SearchTypes';
 
@@ -66,6 +66,13 @@ export const SearchForm = () => {
       </form>
 
       {!state.ok && <p className="text-red-600">{state.error}</p>}
+      {state.ok && state.data.length > 0 && (
+        <p className="mt-2 text-green-600">
+          Found {state.data.length} results
+        </p>
+      )}
+      <hr className="my-4" />
+      <h2 className="text-lg font-semibold">Results</h2>
       <SearchResults items={state.data} />
     </div>
   );

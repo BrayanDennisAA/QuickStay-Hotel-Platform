@@ -3,7 +3,7 @@
 import { SearchMapper } from '../../infrastructure/mappers/SearchMapper';
 import { BffSearchRepository } from '../../infrastructure/repositories/BffSearchRepository';
 import { SearchActionState } from '../../types/SearchTypes';
-import { SearchHotelsUseCase } from '../uses-cases/SearchHotelsUseCase';
+import { SearchHotelsUseCase } from '../../application/uses-cases/SearchHotelsUseCase';
 
 export async function searchHotelsAction(
   _prevState: SearchActionState,
