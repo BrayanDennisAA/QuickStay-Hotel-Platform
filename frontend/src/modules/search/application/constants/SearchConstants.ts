@@ -1,0 +1,1 @@
+export const SEARCH_BFF_ENDPOINT = '/api/search/hotels';
